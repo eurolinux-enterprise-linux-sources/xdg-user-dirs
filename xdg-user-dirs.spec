@@ -3,7 +3,7 @@
 
 Name:		xdg-user-dirs
 Version:	0.15
-Release:	1%{?dist}
+Release:	4%{?dist}
 Summary:	Handles user special directories
 
 Group:		User Interface/Desktops
@@ -15,6 +15,7 @@ Source1:	xdg-user-dirs.sh
 # use fuzzy translations (for Downloads)
 # https://bugzilla.redhat.com/show_bug.cgi?id=532399
 Patch0:		use-fuzzy.patch
+Patch1:         xdg-user-dirs-translations.patch
 
 BuildRequires:	gettext
 BuildRequires:  docbook-style-xsl
@@ -28,6 +29,7 @@ homedirectory based on the defaults configured by the administrator.
 %prep
 %setup -q
 %patch0 -p1 -b .use-fuzzy
+%patch1 -p2 -b .translations
 
 %build
 %configure
@@ -56,6 +58,16 @@ install -p -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/X11/xinit/xinitrc.d
 
 
 %changelog
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 0.15-4
+- Mass rebuild 2014-01-24
+
+* Wed Jan 22 2014 Alexander Larsson <alexl@redhat.com> - 0.15-3
+- Add missing translations
+  Resolves: rhbz#1030389
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 0.15-2
+- Mass rebuild 2013-12-27
+
 * Thu Jun 27 2013 Matthias Clasen <mclasen@redhat.com> - 0.15-1
 - Man pages
 - Translation updates
