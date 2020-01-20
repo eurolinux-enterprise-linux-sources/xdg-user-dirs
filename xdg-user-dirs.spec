@@ -3,21 +3,23 @@
 
 Name:		xdg-user-dirs
 Version:	0.15
-Release:	4%{?dist}
+Release:	5%{?dist}
 Summary:	Handles user special directories
 
 Group:		User Interface/Desktops
 License:	GPLv2+ and MIT
 URL:		http://freedesktop.org/wiki/Software/xdg-user-dirs
 Source0:	http://user-dirs.freedesktop.org/releases/%{name}-%{version}.tar.gz
-Source1:	xdg-user-dirs.sh
 
 # use fuzzy translations (for Downloads)
 # https://bugzilla.redhat.com/show_bug.cgi?id=532399
 Patch0:		use-fuzzy.patch
 Patch1:         xdg-user-dirs-translations.patch
+# https://bugzilla.redhat.com/show_bug.cgi?id=1412762
+Patch2:         autostart.patch
 
-BuildRequires:	gettext
+BuildRequires:  git
+BuildRequires:  gettext, autoconf, automake, intltool
 BuildRequires:  docbook-style-xsl
 BuildRequires:  libxslt
 Requires:	%{_sysconfdir}/X11/xinit/xinitrc.d
@@ -27,10 +29,9 @@ Contains xdg-user-dirs-update that updates folders in a users
 homedirectory based on the defaults configured by the administrator.
 
 %prep
-%setup -q
-%patch0 -p1 -b .use-fuzzy
-%patch1 -p2 -b .translations
+%autosetup -S git
 
+autoreconf --force --install
 %build
 %configure
 make %{?_smp_mflags}
@@ -41,8 +42,6 @@ make update-gmo
 
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/X11/xinit/xinitrc.d
-install -p -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/X11/xinit/xinitrc.d
 
 %find_lang %name
 
@@ -52,12 +51,16 @@ install -p -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/X11/xinit/xinitrc.d
 %{_bindir}/*
 %config(noreplace) %{_sysconfdir}/xdg/user-dirs.conf
 %config(noreplace) %{_sysconfdir}/xdg/user-dirs.defaults
-%{_sysconfdir}/X11/xinit/xinitrc.d/*
+%{_sysconfdir}/xdg/autostart/xdg-user-dirs.desktop
 %{_mandir}/man1/*
 %{_mandir}/man5/*
 
 
 %changelog
+* Thu Oct 05 2017 Ray Strode <rstrode@redhat.com> - 0.15-5
+- Start using autostart mechanism instead of xinitrc.d script
+  Resolves: #1412762
+
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 0.15-4
 - Mass rebuild 2014-01-24
 

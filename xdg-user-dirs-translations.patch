@@ -1,5 +1,13 @@
---- a/xdg-user-dirs-0.15/po/pa.po	2013-11-28 18:14:06.627837017 +0530
-+++ a/xdg-user-dirs-0.15/po/pa.po	2013-11-28 18:15:08.386409371 +0530
+From eff699165095bdc150d58e8dfca98af11c9ee2af Mon Sep 17 00:00:00 2001
+From: git
+Date: Thu, 17 Aug 2017 04:05:46 +0200
+Subject: translations
+
+This commit adds translations
+
+diff --git a/po/pa.po b/po/pa.po
+--- a/po/pa.po
++++ b/po/pa.po
 @@ -1,133 +1,132 @@ 
  # Translation of xdg-user-dirs to Punjabi.
  # Copyright (C) 2008 Red Hat, Inc

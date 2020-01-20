@@ -1,0 +1,45 @@
+From eff699165095bdc150d58e8dfca98af11c9ee2af Mon Sep 17 00:00:00 2001
+From: Matthias Klumpp <matthias@tenstral.net>
+Date: Thu, 17 Aug 2017 04:05:46 +0200
+Subject: Add autostart .desktop file for user-dirs-update
+
+The user-dirs update was traditionally done by an Xsession.d snippet,
+which does not work in a Wayland session.
+To avoid duplicating the .desktop file in every distribution, we ship it
+upstream.
+
+https://bugs.freedesktop.org/show_bug.cgi?id=102303
+
+diff --git a/Makefile.am b/Makefile.am
+index 9a40e68..a3ef127 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -19,6 +19,9 @@ EXTRA_DIST= config.rpath translate.c autogen.sh \
+ xdgdir=$(sysconfdir)/xdg
+ xdg_DATA=user-dirs.conf user-dirs.defaults
+ 
++xdgautostartdir=$(xdgdir)/autostart
++xdgautostart_DATA = xdg-user-dirs.desktop
++
+ libraries = $(LIBINTL)
+ 
+ bin_PROGRAMS =					\
+diff --git a/xdg-user-dirs.desktop b/xdg-user-dirs.desktop
+new file mode 100644
+index 0000000..6b969d4
+--- /dev/null
++++ b/xdg-user-dirs.desktop
+@@ -0,0 +1,10 @@
++[Desktop Entry]
++Type=Application
++Name=User folders update
++TryExec=xdg-user-dirs-update
++Exec=xdg-user-dirs-update
++StartupNotify=false
++NoDisplay=true
++
++X-GNOME-Autostart-Phase=Initialization
++X-KDE-autostart-phase=1
+-- 
+cgit v0.10.2
+
